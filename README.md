@@ -1,6 +1,9 @@
 # synchronous-dashboard-with-jitsi
 A virtual meeting platform without video using jitsi as both audio and data channel.
 # Overview
+![Screenshot](https://github.com/arundquist/synchronous-dashboard-with-jitsi/blob/main/Screenshot%202021-01-16%20at%208.26.52%20PM.png)
+
+[Here's a Loom video walkthrough](https://www.loom.com/share/83d256d8c6434d60a416819e08be84c9)
 Main features:
 * No video (on purpose, see below about using screen real estate)
 * Jitsi-based audio
