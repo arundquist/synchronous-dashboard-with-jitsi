@@ -98,7 +98,7 @@ const scriptRunPromise = ()=>
 }
 ```
 
-Here's the code I use to get the url for a new Google Drawing:
+Here's the code I use to get the url for a new Google Drawing and send it to all participants:
 ```javascript
 const getNew=async () =>
 {
