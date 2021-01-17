@@ -153,6 +153,14 @@ I wasn't sure where I wanted to place all my differnet tools but I wrote some co
 
 Here's the code:
 ```javascript
+const makeDiv=(cl,id="")=>
+{
+  var div=document.createElement("div");
+  div.id=id;
+  div.className+=cl;
+  return div;
+}
+
 const makeRowsAndColumns=(parent, list)=>
 {
   var pclass=parent.className;
