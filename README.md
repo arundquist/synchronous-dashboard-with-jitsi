@@ -11,7 +11,7 @@ A virtual meeting platform without video using jitsi as both audio and data chan
 * Breakout rooms
 * Chat (room chat and private chats with anyone else in the room)
 * Hand raising queues (both for follow up questions and new topics)
-* Whiteboards (multiple in the "main" room and one each for the breakout rooms
+* Whiteboards (multiple in the "main" room and one each for the breakout rooms)
 * Polling
 * Understanding checks using a slider (or input range)
 
@@ -52,6 +52,8 @@ Google has two major collaborative drawing applications they support. Many teach
 This will really only work if you're at a google school. I've built a work around to allow for people who aren't at my school (see the top ~20 lines of code.js) but all those folks need to have google accounts to see the whiteboards.
 
 Right now this is set to use the public Jitsi server. That's not scaleable. I'll eventually put it on my own server and you might have to do that too. Luckily it's not using video so it's really not the bandwidth hog something like Zoom is.
+
+Note that [the directions on this page](https://www.brring.com/2020/04/04/setting-up-a-jitsi-server-in-less-than-15-minutes/) are pretty easy to follow. I think it really did only take me 15 minutes to shift from jitsi's free server to my own.
 ## Set up Spreadsheet
 You just need one tab: "roster" that has (unique!) names in the first column and emails in the second column. Feel free to [use this template](https://docs.google.com/spreadsheets/d/1BnjBrSzlzJ1b9JLwq8cuD9Ik0OJVVKDFvU2CavdXBn0/edit?usp=sharing) as a start (which also has all the code in it ready to go!).
 
