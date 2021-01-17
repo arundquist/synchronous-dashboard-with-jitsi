@@ -63,5 +63,134 @@ I've uploaded all the javascript and html into this repository so you can just c
 * Update the top lines in "globals.gs" with your email and google ids of your drawing template and folder
 * Go to "Publish -> Deploy as web app" and make a new version, deciding who has access.
     * the first time this will ask you to review the permissions
+    
+# Lessons learned
+## Using google.script.run as a promise
+I googled around a lot and found differnet versions of this. [This page](https://gist.github.com/shrugs/44cfb94faa7f09bcd9cb) has most of it but you need to heed the second comment. Here's my implementation:
+```javascript
+const scriptRunPromise = ()=>
+{
+  const gs = {};
+  
+  // google.script.run contains doSomething() methods at runtime.
+  // Object.keys(goog.sscript.run) returns array of method names.
+  const keys = Object.keys(google.script.run);
+  
+  // for each key, i.e. method name...
+  for (let i=0; i < keys.length; i++) {
+    // assign the function to gs.doSomething() which returns...
+    gs[keys[i]] = (function(key) {
+      // a function which accepts arbitrary args and returns...
+      return function(...args) {
+        // a promise that executes ...
+        return new Promise(function(resolve, reject) {
+          google.script.run
+            .withSuccessHandler(resolve)
+            .withFailureHandler(reject)[key]
+            .apply(google.script.run, args);
+        });
+      };
+    })(keys[i]);
+  }
+  return gs;
+  // gs.doSomething() returns a promise that will execulte 
+  // google.script.run.withSuccessHandler(...).withFailureHandler(...).doSomething()
+}
+```
+
+Here's the code I use to get the url for a new Google Drawing:
+```javascript
+const getNew=async () =>
+{
+  try
+  {
+    var newUrl=await scriptRunPromise().newDrawings(["main"]);
+    newUrl=newUrl[0]+"&rm=embedded";
+    addMainDraw(newUrl);
+    sendEvent(apis["main"],{type:"mainRoomUrl", payload:{url:newUrl}});
+  } catch(err) {
+    alert(err); // TypeError: failed to fetch
+  }
+}
+```
+
+I find this all so much easier than the usual `google.script.run.withSuccessHandler` approach, especially if you need to get the async part right.
+
+## Editing javascript in google apps script
+I used to put all my client-side code in the main.html document. But that was a hassle in their IDE (even the new awesome one) because it didn't catch any syntax errors, because it only looks for html errors. So I really wanted to find a way to use their IDE but to create javascript code that went on the client side.
+
+So I finally found a way. If I want to write a function that will work on the client, I do something like this:
+```javascript
+const functionName=(arg, list)=>
+{
+   doCoolStuff;
+}
+funcs.push(functionName)
+```
+
+That works as long as in your globals area you add `var funcs=[]` and when you declare your html template you do this:
+```javascript
+var t=HtmlService.createTemplateFromFile("main");
+t.funcs=funcs;
+t.funcnames=t.funcs.map(f=>f.name);
+return t.evaluate();
+```
+and finally in your "main.html" you add a script section that does this:
+```javascript
+var funcnames=<?!= JSON.stringify(funcnames) ?>;
+var funcs=[<?!= funcs ?>];
+funcnames.forEach((fn,i)=>window[fn]=funcs[i]);
+```
+
+Similarly you can have global variables by adding `t.globals` and then adding this to your "main.html"
+```javascript
+var globals = <?!= JSON.stringify(globals) ?>;
+Object.keys(globals).forEach(key=>window[key]=globals[key]);
+```
+
+## Placing divs in bootstrap rows and columns
+I wasn't sure where I wanted to place all my differnet tools but I wrote some code that let me first just put all of them in their various divs and then place them however I wanted in bootstrap rows and columns.
+
+Here's the code:
+```javascript
+const makeRowsAndColumns=(parent, list)=>
+{
+  var pclass=parent.className;
+  var c="row";
+  if (pclass.includes("row") || pclass.includes("col"))
+  {
+    if (pclass.includes("row"))
+    {
+      c="col";
+    }
+  }
+  
+  list.forEach(l=>
+  {
+    if (!Array.isArray(l))
+    {
+      l.className+=c;
+      parent.appendChild(l);
+    } else {
+      var par=makeDiv(c);
+      parent.appendChild(par);
+      makeRowsAndColumns(par,l);
+    }
+
+  })
+}
+```
+
+Here's how it works. Let's say you want something like:
+```
+a                 b                     c
+      d                      e
+f                 g                     h/i
+```
+where each letter is a div and h/i just means two row divs in that third column. You would run 
+```javascript
+makeRowsAndColumns(parentDiv, [[a,b,c], [d,e], [f,g,[h,i]]])
+```
+and you're done!
 
 
