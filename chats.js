@@ -13,9 +13,12 @@ const makeChat=(title, id)=>
   // div.className="scr";
   var extra="";
   if (pid!="") extra=`<button onclick="closePrivateChat('${id}')">close</button><br/>`;
-  var tmp=document.createElement("h3");
-  tmp.innerHTML=title+extra;
-  div.appendChild(tmp);
+  if (pid!="")
+  {
+    var tmp=document.createElement("h5");
+    tmp.innerHTML=title+extra;
+    div.appendChild(tmp);
+  }
   tmp=document.createElement("textarea");
   tmp.id=`ta${id}`;
   tmp.addEventListener("keyup", function(event) 
@@ -88,7 +91,7 @@ const sendChatToAll=()=>
   var otherApis=Object.keys(apis).map(a=>apis[a]).filter(a=>a.roomName!="main");
   if (otherApis.length==0) return;
   otherApis.forEach(api=>sendEvent(api,{type:"chat",payload:{chatId:`${api.roomName}---`,
-                                      text:`<b>${myName}</b>: ${text}`}}))
+                                      text:`<b>To All</b>: ${text}`}}))
   ta.value="";
 }
 iFuncs.push(sendChatToAll);
