@@ -55,7 +55,7 @@ Right now this is set to use the public Jitsi server. That's not scaleable. I'll
 
 Note that [the directions on this page](https://www.brring.com/2020/04/04/setting-up-a-jitsi-server-in-less-than-15-minutes/) are pretty easy to follow. I think it really did only take me 15 minutes to shift from jitsi's free server to my own.
 ## Set up Spreadsheet
-You just need one tab: "roster" that has (unique!) names in the first column and emails in the second column. Feel free to [use this template](https://docs.google.com/spreadsheets/d/1BnjBrSzlzJ1b9JLwq8cuD9Ik0OJVVKDFvU2CavdXBn0/edit?usp=sharing) as a start (which also has all the code in it ready to go!).
+You just need one tab: "roster" that has (unique!) names in the first column and emails in the second column. Feel free to [use this template](https://docs.google.com/spreadsheets/d/1Gh3WWlPPajz8gvFD-MNHeF80u81-xGSPRp2vnWTF0T4/edit?usp=sharing) as a start (which also has all the code in it ready to go!).
 
 I've uploaded all the javascript and html into this repository so you can just copy and paste it into a new script tied to your spreadsheet (especially if it seems the code hasn't come along with your "make a copy" of my template).
 
