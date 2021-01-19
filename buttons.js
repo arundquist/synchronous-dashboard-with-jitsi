@@ -10,6 +10,7 @@ const singleButton=(input,container)=>
   var checkbox = document.createElement('input');
   checkbox.type = 'checkbox';
   checkbox.id = `b${input}`;
+  checkbox.className="largerCheckbox";
   checkbox.name = input;
   checkbox.onchange=function() 
   {
@@ -24,13 +25,16 @@ const singleButton=(input,container)=>
   } 
  
   var label = document.createElement('label')
-  label.htmlFor = `b${input}`;
+  // label.htmlFor = `b${input}`;
   label.appendChild(document.createTextNode(input));
+  
   var br=document.createElement("br");
+  label.appendChild(br);
+  label.appendChild(checkbox);
 
-  container.appendChild(checkbox);
+  // container.appendChild(checkbox);
   container.appendChild(label);
-  container.appendChild(br);
+  // container.appendChild(br);
 
   if (instructor)
   {
@@ -41,11 +45,12 @@ const singleButton=(input,container)=>
 }
 funcs.push(singleButton)
 
-const updateButton=(payload)=>
+const updateButton=(payload, senderId)=>
 {
-  var id=payload.senderId;
-  buttonList[payload.button][payload.senderId]=payload.value;
-  var avgs=buttonNames.map(button=>Object.keys(buttonList[button]).reduce((a,b)=>a+buttonList[button][b],0));
+  buttonList[payload.button][senderId]=payload.value;
+  var participants=apis["main"].getParticipantsInfo();
+  var idList=participants.map(p=>p.participantId);
+  var avgs=buttonNames.map(button=>Object.keys(buttonList[button]).reduce((a,b)=>a+idList.includes(b)?buttonList[button][b]:0,0));
   buttonNames.forEach((button,i)=>document.getElementById("buttonAvg"+button).innerHTML=avgs[i]);
 }
 iFuncs.push(updateButton)
