@@ -32,10 +32,10 @@ const dealWithEvent=(data,api,room)=>
       transferClient(payload.queuename, payload.hand)
       break;
     case "sliderUpdate":
-      updateSlider(payload);
+      updateSlider(payload,senderId);
       break;
     case "buttonUpdate":
-      updateButton(payload);
+      updateButton(payload, senderId);
       break;
     default:
       alert("I don't know what to do with this event: "+type);
@@ -78,12 +78,13 @@ var joinRoom=(roomObject, resetOptions=false, toggle=false)=>
   {
     newDiv=document.createElement("div");
     newDiv.id=divId;
+    newDiv.className="col whole-room";
     document.getElementById("meets").appendChild(newDiv);
     var jitsidiv=document.createElement("div");
     jitsidiv.id="jitsi"+roomNumber;
     var jitsiControlDiv=document.createElement("div");
-    var html=`<input type="checkbox" class="custom-control-input" id="mic${roomNumber}" onchange="toggleMic(this, '${roomNumber}')">
-        <label class="custom-control-label" for="mic${roomNumber}">microphone</label>`;
+    var html=`<input type="checkbox" class="largerCheckbox" id="mic${roomNumber}" onchange="toggleMic(this, '${roomNumber}')">
+        <label class="" for="mic${roomNumber}">microphone</label>`;
     jitsiControlDiv.innerHTML=html;
     var presentlistdiv=document.createElement("div");
     presentlistdiv.id="presentlist"+roomNumber;
@@ -137,28 +138,30 @@ var joinRoom=(roomObject, resetOptions=false, toggle=false)=>
       followupqueueDivVar.appendChild(sp);
       
     }
-    // always: jitsidiv, jitsiControldiv, presentlistdiv, drawdiv, chatcontainer [[jitsidiv,[jitsiControlDiv,presentlistdiv]],[drawdiv,chatcontainer]]
+    // always: jitsidiv, jitsiControlDiv, presentlistdiv, drawdiv, chatcontainer [[jitsidiv,[jitsiControlDiv,presentlistdiv]],[drawdiv,chatcontainer]]
     // main all: urlListDiv,sliderDiv, buttonDiv, newqueuedivVar,followupqueueDivVar
     // instructor always: btndiv 
+    
     var divArray=[];
     if (instructor)
     {
       if (roomNumber=="main")
       {
-        divArray=[[jitsidiv,[jitsiControlDiv,presentlistdiv,sliderDiv,buttonDiv]],[chatcontainer,[followupqueueDivVar,newqueueDivVar],[btndiv,drawdiv, urlListDiv]]];
+        divArray=[jitsidiv,presentlistdiv,[sliderDiv,buttonDiv],[[jitsiControlDiv,chatcontainer],[followupqueueDivVar,newqueueDivVar],[btndiv,drawdiv, urlListDiv]]];
       } else {
-        divArray=[[jitsidiv,[jitsiControlDiv,presentlistdiv]],[chatcontainer,[btndiv,drawdiv]]];
+          divArray=[jitsidiv,presentlistdiv,[[jitsiControlDiv,chatcontainer],[btndiv,drawdiv]]];
       }
     } else {
       if (roomNumber=="main")
       {
-        divArray=[[jitsidiv,[jitsiControlDiv,presentlistdiv,sliderDiv,buttonDiv]],[chatcontainer,[followupqueueDivVar,newqueueDivVar],[drawdiv, urlListDiv]]];
+        divArray=[jitsidiv,presentlistdiv,[sliderDiv,buttonDiv],[[jitsiControlDiv,chatcontainer],[followupqueueDivVar,newqueueDivVar],[drawdiv, urlListDiv]]];
       } else {
-        divArray=[[jitsidiv,[jitsiControlDiv,presentlistdiv]],[chatcontainer,drawdiv]];
+        divArray=[jitsidiv,presentlistdiv,[[jitsiControlDiv,chatcontainer],drawdiv]];
       }
     }
 
     if (instructor && roomNumber != "main") newDiv.style.display="none";
+    jitsidiv.style.display="none";
     makeRowsAndColumns(newDiv,divArray);
     makeChat(roomNumber,roomNumber+"---");
     if (roomNumber != "main") addDrawing(roomNumber, roomObject.drawUrl);
@@ -186,6 +189,7 @@ var joinRoom=(roomObject, resetOptions=false, toggle=false)=>
   if (instructor) apis[roomNumber]=api;
   divs[roomNumber]=newDiv;
   updateMeetList();
+  if (roomNumber=="main" && !instructor) showThisOne("main")
   if (!instructor) {
     currentApi=api;
     currentRoom=roomNumber;
