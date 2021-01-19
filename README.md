@@ -20,7 +20,7 @@ As my school went mostly online last spring, I started collecting my thoughts ab
 
 So I set out looking for ways to build in collaborative tools like whiteboards and understanding checks that would make better use of screen space. This is the result.
 
-Soon I'll link to a blog post with much more of my philosophy.
+[Here's a blog post with more of my philosophy about these sorts of tools.](https://arundquist.wordpress.com/2021/01/18/synchronous-dashboard-with-audio-and-breakouts/)
 
 # Technologies used
 ## Jitsi
