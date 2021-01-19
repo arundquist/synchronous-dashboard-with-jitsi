@@ -165,22 +165,30 @@ const makeRowsAndColumns=(parent, list)=>
 {
   var pclass=parent.className;
   var c="row";
-  if (pclass.includes("row") || pclass.includes("col"))
+  if (pclass.includes("row"))
   {
-    if (pclass.includes("row"))
-    {
-      c="col";
-    }
+    // var num=list.length;
+    // var width=Math.floor(parentWidth/num);
+    c="col"; //-md-"+width;
   }
-  
   list.forEach(l=>
   {
     if (!Array.isArray(l))
     {
-      l.className+=c;
-      parent.appendChild(l);
+      if (c=="row")
+      {
+        var singleCol=makeDiv("row");
+        l.className+="col";
+        singleCol.appendChild(l);
+        parent.appendChild(singleCol);
+      } else {
+        l.className+=c;
+        parent.appendChild(l);
+      }
+      
     } else {
       var par=makeDiv(c);
+      par.className+=" major-element";
       parent.appendChild(par);
       makeRowsAndColumns(par,l);
     }
