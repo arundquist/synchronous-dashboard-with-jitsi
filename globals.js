@@ -1,9 +1,9 @@
 ////////////// YOU ONLY NEED TO CHANGE THE VARIABLES IN THIS BLOCK ///////////
-var youremail="";
-var drawingTemplate = ""; // google id of the blank drawing template
-var drawingFolder = ""; // google id of the folder where all the drawings will go. You should share that folder with your students
-var buttonNames=[1,2,3,4]; // you can have as many poll items as you like
-var jitsiBaseName=""; // name of your jitsi meets. Make sure it's unique
+var youremail="YOUR EMAIL HERE";
+var drawingTemplate = "GOOGLE ID OF GOOGLE DRAWING TEMPLATE";
+var drawingFolder = "GOOGLE ID OF DRIVE FOLDER";
+var buttonNames=[1,2,3,4]; // feel free to change or add
+var roomBaseName="UNIQUE NAME FOR YOUR CLASS";
 //////////////////////////////////////////////////////////////////////////////
 
 
@@ -44,11 +44,11 @@ var globals={currentUserId:currentUserId,
              buttonList: buttonList,
              allParticipants:[],
              optionsList:{},
-             roomNameBase: jitsiBaseName,
+             roomNameBase: roomBaseName,
              roster:{},
              ids:{},
              options: {
-                        roomName: jitsiBaseName,
+                        roomName: roomBaseName,
                         width: 100,
                         height: 100,
                         configOverwrite:{startAudioOnly: true,
