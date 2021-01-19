@@ -28,11 +28,19 @@ const makeSlider=(element)=>
 }
 funcs.push(makeSlider)
 
-const updateSlider=(payload)=>
+const updateSlider=(payload,senderId)=>
 {
-  var id=payload.senderId;
-  sliderList[id]=payload.value;
-  var avg=Object.keys(sliderList).reduce((a,b)=>a+sliderList[b],0)/Object.keys(sliderList).length;
+  sliderList[senderId]=payload.value;
+  var participants=apis["main"].getParticipantsInfo();
+  var idList=participants.map(p=>p.participantId);
+  Object.keys(sliderList).forEach(key=>
+  {
+    if(!idList.includes(key))
+    {
+      delete sliderList[key];
+    }
+  })
+  var avg=Object.keys(sliderList).reduce((a,b)=>a+Number(sliderList[b]),0)/Object.keys(sliderList).length;
   document.getElementById("sliderAvg").innerHTML=avg;
   document.getElementById("understanding").value=avg;
 }
